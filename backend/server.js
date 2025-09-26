@@ -1,11 +1,12 @@
 require('dotenv').config();
 const express = require('express');
-const connectDB = require('./config/db');
+const { connectDB } = require('./config/db');
 
 const app = express();
-connectDB();
-
 app.use(express.json());
+
+// Connect to Azure SQL Database
+connectDB();
 
 // ...existing routes...
 

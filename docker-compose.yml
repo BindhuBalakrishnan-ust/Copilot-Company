@@ -8,10 +8,13 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - MONGO_URI=${MONGO_URI}
-      - JWT_SECRET=${JWT_SECRET}
+      - SQL_SERVER=${SQL_SERVER}
+      - SQL_DATABASE=${SQL_DATABASE}
+      - SQL_USER=${SQL_USER}
+      - SQL_PASSWORD=${SQL_PASSWORD}
     depends_on:
-      - mongo
+      - sqlserver
+    restart: on-failure
 
   frontend:
     build:
@@ -20,11 +23,12 @@ services:
     ports:
       - "3000:3000"
 
-  mongo:
-    image: mongo:5
-    container_name: mongo
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
     ports:
-      - "27017:27017"
+      - "1433:1433"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SQL_PASSWORD}
+    restart: always
